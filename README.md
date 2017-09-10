@@ -1,12 +1,18 @@
 
-# Implement a Planning Search
+# Implement a Planning Search 实现货运路线规划
 
-## Synopsis
+
+## Synopsis 概要
 
 This project includes skeletons for the classes and functions needed to solve deterministic logistics planning problems for an Air Cargo transport system using a planning search agent. 
 With progression search algorithms like those in the navigation problem from lecture, optimal plans for each 
 problem will be computed.  Unlike the navigation problem, there is no simple distance heuristic to aid the agent. 
 Instead, you will implement domain-independent heuristics.
+
+该项目包括使用规划搜索代理解决航空货运运输系统确定性物流规划问题所需的类和功能的骨架。
+利用课程导航问题中的进度搜索算法，可以计算每个问题的最优计划。与导航问题不同，没有简单的距离启发式来帮助代理。
+相反，您将实现域独立的启发式。
+
 ![Progression air cargo search](images/Progression.PNG)
 
 - Part 1 - Planning problems:
@@ -21,25 +27,46 @@ Instead, you will implement domain-independent heuristics.
 	- TODO: Experiment and document metrics
 - Part 3 - Written Analysis
 
-## Environment requirements
-- Python 3.4 or higher
-- Starter code includes a copy of [companion code](https://github.com/aimacode) from the Stuart Russel/Norvig AIMA text.  
+- 第1部分 - 规划问题：
+	- READ：Russel/Norvig AIMA文本的适用部分
+	- GIVEN：经典PDDL（规划域定义语言）中定义的问题
+	- TODO：实现 `my_air_cargo_problems.py` 中标记的Python方法和函数
+	- TODO：实验和文档指标
+- 第2部分 - 域无关启发式：
+	- READ：Russel/Norvig AIMA文本的适用部分
+	- TODO：在 `my_air_cargo_problems.py` 中实现轻松的问题启发式
+	- TODO：在 `my_planning_graph.py` 中实现计划图和自动启发式
+	- TODO：实验和文档指标
+- 第3部分 - 书面分析
 
+## Environment requirements 环境要求
+- Python 3.4 or higher 
+- Starter code includes a copy of [companion code](https://github.com/aimacode) from the Stuart Russel/Norvig AIMA text.  
 
-## Project Details
-### Part 1 - Planning problems
-#### READ: Stuart Russel and Peter Norvig text:
+- Python 3.4或者以上版本
+- 起动器代码包含Stuart Russel/Norvig AIMA文本的[companion code](https://github.com/aimacode) 的副本。
+
+## Project Details 项目细节
+### Part 1 - Planning problems  第1部分 - 规划问题
+#### READ: Stuart Russel and Peter Norvig text: 阅读：Stuart Russell和Peter Norvig文字：
 
 "Artificial Intelligence: A Modern Approach" 3rd edition chapter 10 *or* 2nd edition Chapter 11 on Planning, available [on the AIMA book site](http://aima.cs.berkeley.edu/2nd-ed/newchap11.pdf) sections: 
+
+“人工智能：现代方法”第3版第10章*第2版第11章规划，可在[在AIMA书网站上](http://aima.cs.berkeley.edu/2nd-ed/newchap11.pdf) 部分：
 
 - *The Planning Problem*
 - *Planning with State-space Search*
 
-#### GIVEN: classical PDDL problems
+- *规划问题*
+- *使用状态空间搜索进行规划*
+
+#### GIVEN: classical PDDL problems 古典PDDL问题
 
 All problems are in the Air Cargo domain.  They have the same action schema defined, but different initial states and goals.
 
-- Air Cargo Action Schema:
+所有问题都在航空货运领域。 它们具有定义相同的动作模式，但是具有不同的初始状态和目标。
+
+- Air Cargo Action Schema: 空运行动方案：
 ```
 Action(Load(c, p, a),
 	PRECOND: At(c, a) ∧ At(p, a) ∧ Cargo(c) ∧ Plane(p) ∧ Airport(a)
@@ -52,7 +79,7 @@ Action(Fly(p, from, to),
 	EFFECT: ¬ At(p, from) ∧ At(p, to))
 ```
 
-- Problem 1 initial state and goal:
+- Problem 1 initial state and goal: 问题1初始状态和目标：
 ```
 Init(At(C1, SFO) ∧ At(C2, JFK) 
 	∧ At(P1, SFO) ∧ At(P2, JFK) 
@@ -61,7 +88,7 @@ Init(At(C1, SFO) ∧ At(C2, JFK)
 	∧ Airport(JFK) ∧ Airport(SFO))
 Goal(At(C1, JFK) ∧ At(C2, SFO))
 ```
-- Problem 2 initial state and goal:
+- Problem 2 initial state and goal: 问题2初始状态和目标：
 ```
 Init(At(C1, SFO) ∧ At(C2, JFK) ∧ At(C3, ATL) 
 	∧ At(P1, SFO) ∧ At(P2, JFK) ∧ At(P3, ATL) 
@@ -70,7 +97,7 @@ Init(At(C1, SFO) ∧ At(C2, JFK) ∧ At(C3, ATL)
 	∧ Airport(JFK) ∧ Airport(SFO) ∧ Airport(ATL))
 Goal(At(C1, JFK) ∧ At(C2, SFO) ∧ At(C3, SFO))
 ```
-- Problem 3 initial state and goal:
+- Problem 3 initial state and goal: 问题3初始状态和目标：
 ```
 Init(At(C1, SFO) ∧ At(C2, JFK) ∧ At(C3, ATL) ∧ At(C4, ORD) 
 	∧ At(P1, SFO) ∧ At(P2, JFK) 
@@ -80,17 +107,33 @@ Init(At(C1, SFO) ∧ At(C2, JFK) ∧ At(C3, ATL) ∧ At(C4, ORD)
 Goal(At(C1, JFK) ∧ At(C3, JFK) ∧ At(C2, SFO) ∧ At(C4, SFO))
 ```
 
-#### TODO: Implement methods and functions in `my_air_cargo_problems.py`
+#### TODO: Implement methods and functions in `my_air_cargo_problems.py`  
+
+TODO: 在`my_air_cargo_problems.py`中实现方法和函数
+
 - `AirCargoProblem.get_actions` method including `load_actions` and `unload_actions` sub-functions
 - `AirCargoProblem.actions` method
 - `AirCargoProblem.result` method
 - `air_cargo_p2` function
 - `air_cargo_p3` function
 
+- `AirCargoProblem.get_actions` 方法，包括 `load_actions` 和 `unload_actions` 子功能
+- `AirCargoProblem.actions` 方法
+- `AirCargoProblem.result` 方法
+- `air_cargo_p2`功能
+- `air_cargo_p3`功能
+
 #### TODO: Experiment and document metrics for non-heuristic planning solution searches
+
+TODO：非启发式规划解决方案搜索的实验和文档度量
+
 * Run uninformed planning searches for `air_cargo_p1`, `air_cargo_p2`, and `air_cargo_p3`; provide metrics on number of node expansions required, number of goal tests, time elapsed, and optimality of solution for each search algorithm. Include the result of at least three of these searches, including breadth-first and depth-first, in your write-up (`breadth_first_search` and `depth_first_graph_search`). 
 * If depth-first takes longer than 10 minutes for Problem 3 on your system, stop the search and provide this information in your report.
 * Use the `run_search` script for your data collection: from the command line type `python run_search.py -h` to learn more.
+
+* 运行不了解的计划搜索 `air_cargo_p1`，`air_cargo_p2`和`air_cargo_p3`; 提供所需的节点扩展数量，目标测试次数，时间流逝以及每个搜索算法的解决方案的最优性。 将这些搜索中的至少三个搜索结果（包括宽度优先和深度优先）包含在您的写入 (`breadth_first_search`和`depth_first_graph_search`)中。
+* 如果系统上问题3的深度优先需要超过10分钟，请停止搜索并在报告中提供此信息。
+* 使用`run_search`脚本进行数据收集：从命令行类型`python run_search.py -h`了解更多信息。
 
 >#### Why are we setting the problems up this way?  
 >Progression planning problems can be 
